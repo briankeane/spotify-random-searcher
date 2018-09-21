@@ -13,13 +13,11 @@ if not PORT:
   PORT = 5000
 
 if not MONGO_URL:
-    MONGO_URL = "mongodb://localhost:27017";
+    MONGO_URL = "mongodb://db:27017";
 
 
 ## Connect to Mongodb
-client = MongoClient(
-    'db',
-    27017)
+client = MongoClient(MONGO_URL)
 db = client.tododb
 
 
