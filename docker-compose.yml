@@ -1,0 +1,15 @@
+version: '2'
+services:
+  web:
+    container_name: "web"
+    build: .
+    command: python -u app.py
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/web
+    links:
+      - "db"
+  db:
+    container_name: "db"
+    image: mongo:3.0.2
