@@ -25,7 +25,7 @@ def run_search():
         display_same_line("storing... " + str(i+1) + " of " + str(len(playlists)) + " for spotifyUID: " + id_string)
         DBHandler.upsert_playlist({ 'id': playlist['id'] }, playlist)
 
-    display_same_line("marking user completed")
+    display_same_line("marking user " + id_string + " completed")
     DBHandler.upsert_user({ 'id': id_string }, { 'id': id_string, 'hasBeenSearched': True })
 
 
@@ -41,13 +41,13 @@ def display_same_line(message):
 # def new():
 #     return redirect(url_for('todo'))
 retries = 0
-# while retries < 1000:
-#   try:
-#     run_search()
-#   except:
-#     retries += 1
-#     print("exception experienced. sleeping for 5 secs... " + str(1000-retries) + " retries remaining")
-#     time.sleep(5)
+while retries < 1000:
+  try:
+    run_search()
+  except:
+    retries += 1
+    print("exception experienced. sleeping for 5 secs... " + str(1000-retries) + " retries remaining")
+    time.sleep(5)
 
 
 # if __name__ == "__main__":
