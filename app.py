@@ -49,6 +49,7 @@ while retries < 1000:
     print("exception experienced. sleeping for 5 secs... " + str(1000-retries) + " retries remaining")
     time.sleep(5)
 
-
-# if __name__ == "__main__":
-#     app.run(host='0.0.0.0', port=PORT, debug=True)
+# bind to port
+app = Flask(__name__)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=PORT, debug=True)
