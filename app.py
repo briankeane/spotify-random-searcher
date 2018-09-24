@@ -22,10 +22,10 @@ def run_search():
     playlists = SpotifyHandler.get_full_playlists_for_user(id_string)
     if len(playlists) > 0:
       for i, playlist in enumerate(playlists):
-        display_same_line("storing... " + str(i+1) + " of " + str(len(playlists)) + " for spotifyUID: " + id_string)
+        print("storing... " + str(i+1) + " of " + str(len(playlists)) + " for spotifyUID: " + id_string)
         DBHandler.upsert_playlist({ 'id': playlist['id'] }, playlist)
 
-    display_same_line("marking user " + id_string + " completed")
+    print("marking user " + id_string + " completed")
     DBHandler.upsert_user({ 'id': id_string }, { 'id': id_string, 'hasBeenSearched': True })
 
 
