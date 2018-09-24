@@ -5,7 +5,6 @@ from pymongo import MongoClient
 from urllib.parse import urlparse
 
 MONGODB_URI = os.environ.get('MONGODB_URI') or "mongodb://db:27017/tododb"
-PORT = os.environ.get('PORT') or 5000
 
 class DatabaseTest(unittest.TestCase):
   @classmethod
