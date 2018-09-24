@@ -1,47 +1,54 @@
 import os
 from flask import Flask, redirect, url_for, request, render_template
 from pymongo import MongoClient
-import sys
+from db.db import Database
+from spotify.spotify import Spotify
+import time
 
-app = Flask(__name__)
+DBHandler = Database()
+SpotifyHandler = Spotify()
 
-##  Set Environment variables
-MONGO_URL = os.environ.get('MONGODB_URI')
-PORT = os.environ.get('PORT')
+MAX_ID = 10
 
-if not PORT:
-  PORT = 5000
+def run_search():
+  starting_user_id = int(DBHandler.find_max_user_id())
+  starting_user_id += 1
 
-if not MONGO_URL:
-    MONGO_URL = "mongodb://db:27017";
+  MAX_ID = 1000000000
 
+  for i in range(starting_user_id, MAX_ID):
+    id_string = str(i).zfill(10)
+    print('retrieving playlists for user: ' + id_string)
+    playlists = SpotifyHandler.get_full_playlists_for_user(id_string)
+    if len(playlists) > 0:
+      for i, playlist in enumerate(playlists):
+        display_same_line("storing... " + str(i+1) + " of " + str(len(playlists)) + " for spotifyUID: " + id_string)
+        DBHandler.upsert_playlist({ 'id': playlist['id'] }, playlist)
 
-## Connect to Mongodb
-client = MongoClient(MONGO_URL)
-db = client.tododb
-
-
-@app.route('/')
-def todo():
-    _items = db.tododb.find()
-    print("----------------------------items---------------------------", file=sys.stdout)
-    print(_items, file=sys.stdout)
-
-    items = [item for item in _items]
-
-    return render_template('todo.html', items=items)
+    display_same_line("marking user completed")
+    DBHandler.upsert_user({ 'id': id_string }, { 'id': id_string, 'hasBeenSearched': True })
 
 
-@app.route('/new', methods=['POST'])
-def new():
+def display_same_line(message):
+  print(message.ljust(50), end="\r")
 
-    item_doc = {
-        'name': request.form['name'],
-        'description': request.form['description']
-    }
-    db.tododb.insert_one(item_doc)
+# @app.route('/')
+# def todo():
+#   return render_template('todo.html', items=items)
 
-    return redirect(url_for('todo'))
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=PORT, debug=True)
+# @app.route('/new', methods=['POST'])
+# def new():
+#     return redirect(url_for('todo'))
+retries = 0
+while retries < 1000:
+  try:
+    run_search()
+  except:
+    retries += 1
+    print("exception experienced. sleeping for 5 secs... " + str(1000-retries) + " retries remaining")
+    time.sleep(5)
+
+
+# if __name__ == "__main__":
+#     app.run(host='0.0.0.0', port=PORT, debug=True)

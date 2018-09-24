@@ -3,13 +3,15 @@ services:
   web:
     container_name: "web"
     build: .
-    command: python -u app.py
+    command: "sleep infinity"
     ports:
       - "5000:5000"
     volumes:
       - .:/web
     links:
       - "db"
+    env_file:
+      - .env
   db:
     container_name: "db"
     image: mongo:3.0.2

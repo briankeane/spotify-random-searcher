@@ -1,10 +1,14 @@
 <form action="/new" method="POST">
+  <h1>This is Cool</h1>
   <input type="text" name="name"></input>
   <input type="text" name="description"></input>
   <input type="submit"></input>
 </form>
 
+<p> accessToken: {{ access_token }} </p>
 {% for item in items %}
-  <h1> {{ item.name }} </h1>
-  <p> {{ item.description }} <p>
+  <p> {{ item.name }} -- {{ item.id }} <p>
+<br>
+  <p> {{ item }} </p>
+<br>
 {% endfor %}
