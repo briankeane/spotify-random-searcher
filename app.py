@@ -41,13 +41,13 @@ def display_same_line(message):
 # def new():
 #     return redirect(url_for('todo'))
 retries = 0
-while retries < 1000:
-  try:
-    run_search()
-  except:
-    retries += 1
-    print("exception experienced. sleeping for 5 secs... " + str(1000-retries) + " retries remaining")
-    time.sleep(5)
+# while retries < 1000:
+#   try:
+#     run_search()
+#   except:
+#     retries += 1
+#     print("exception experienced. sleeping for 5 secs... " + str(1000-retries) + " retries remaining")
+#     time.sleep(5)
 
 
 # if __name__ == "__main__":
