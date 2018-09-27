@@ -11,22 +11,13 @@ SpotifyHandler = Spotify()
 MAX_ID = 10
 
 def run_search():
-  starting_user_id = int(DBHandler.find_max_user_id())
-  starting_user_id += 1
-
-  MAX_ID = 1000000000
-
-  for i in range(starting_user_id, MAX_ID):
-    id_string = str(i).zfill(10)
-    print('retrieving playlists for user: ' + id_string)
-    playlists = SpotifyHandler.get_full_playlists_for_user(id_string)
+  while True:
+    print('retrieving playlists for random phrase: ')
+    playlists = SpotifyHandler.get_full_playlists_for_random_search()
     if len(playlists) > 0:
       for i, playlist in enumerate(playlists):
-        print("storing... " + str(i+1) + " of " + str(len(playlists)) + " for spotifyUID: " + id_string)
+        print("storing... " + str(i+1) + " of " + str(len(playlists)) + " for phrase: " + playlist["discovered_by_phrase"])
         DBHandler.upsert_playlist({ 'id': playlist['id'] }, playlist)
-
-    print("marking user " + id_string + " completed")
-    DBHandler.upsert_user({ 'id': id_string }, { 'id': id_string, 'hasBeenSearched': True })
 
 
 def display_same_line(message):
@@ -40,15 +31,15 @@ def display_same_line(message):
 # @app.route('/new', methods=['POST'])
 # def new():
 #     return redirect(url_for('todo'))
-retries = 0
-while retries < 1000:
-  try:
-    run_search()
-  except:
-    retries += 1
-    print("exception experienced. sleeping for 5 secs... " + str(1000-retries) + " retries remaining")
-    time.sleep(5)
-
+# retries = 0
+# while retries < 1000:
+#   try:
+#     run_search()
+#   except:
+#     retries += 1
+#     print("exception experienced. sleeping for 5 secs... " + str(1000-retries) + " retries remaining")
+#     time.sleep(5)
+run_search()
 # bind to port
 PORT = os.environ.get('PORT') or 5000
 app = Flask(__name__)
