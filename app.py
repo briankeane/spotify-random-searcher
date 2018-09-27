@@ -28,18 +28,15 @@ def display_same_line(message):
 #   return render_template('todo.html', items=items)
 
 
-# @app.route('/new', methods=['POST'])
-# def new():
-#     return redirect(url_for('todo'))
-# retries = 0
-# while retries < 1000:
-#   try:
-#     run_search()
-#   except:
-#     retries += 1
-#     print("exception experienced. sleeping for 5 secs... " + str(1000-retries) + " retries remaining")
-#     time.sleep(5)
-run_search()
+
+retries = 0
+while retries < 1000:
+  try:
+    run_search()
+  except:
+    retries += 1
+    print("exception experienced. sleeping for 5 secs... " + str(1000-retries) + " retries remaining")
+    time.sleep(5)
 # bind to port
 PORT = os.environ.get('PORT') or 5000
 app = Flask(__name__)
